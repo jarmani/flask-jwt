@@ -191,8 +191,8 @@ def test_custom_error_handler(client, jwt):
 def test_custom_response_handler(client, jwt, user):
 
     @jwt.response_handler
-    def resp_handler(payload):
-        return jsonify({'mytoken': payload})
+    def resp_handler(payload, user_arg):
+        return jsonify({'mytoken': payload, 'user_id': user_arg.id})
 
     resp, jdata = post_json(
         client,
@@ -200,6 +200,8 @@ def test_custom_response_handler(client, jwt, user):
         {'username': user.username, 'password': user.password}
     )
     assert 'mytoken' in jdata
+    assert 'user_id' in jdata
+    assert jdata['user_id'] == user.id
 
 
 def test_default_encode_handler(client, user, app):
