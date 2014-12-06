@@ -60,7 +60,7 @@ def _default_decode_handler(token):
     return result
 
 
-def _default_response_handler(payload):
+def _default_response_handler(payload, user):
     """Return a Flask response, given an encoded payload."""
     return jsonify({'token': payload})
 
@@ -163,7 +163,7 @@ class JWTAuthView(MethodView):
 
         if user:
             token = generate_token(user)
-            return _jwt.response_callback(token)
+            return _jwt.response_callback(token, user)
         else:
             raise JWTError('Bad Request', 'Invalid credentials')
 
